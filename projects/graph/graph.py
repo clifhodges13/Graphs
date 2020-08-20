@@ -13,33 +13,81 @@ class Graph:
         """
         Add a vertex to the graph.
         """
-        pass  # TODO
+        if vertex_id not in self.vertices:
+            self.vertices[vertex_id] = set()
 
     def add_edge(self, v1, v2):
         """
         Add a directed edge to the graph.
         """
-        pass  # TODO
+        if v1 in self.vertices and v2 in self.vertices:
+            self.vertices[v1].add(v2)
 
     def get_neighbors(self, vertex_id):
         """
         Get all neighbors (edges) of a vertex.
         """
-        pass  # TODO
+        return self.vertices[vertex_id]
 
     def bft(self, starting_vertex):
         """
         Print each vertex in breadth-first order
         beginning from starting_vertex.
         """
-        pass  # TODO
+
+        # Create an empty queue and enqueue the starting_vertex
+        q = Queue()
+        q.enqueue(starting_vertex)
+        # create an empty set to track visited vertices
+        visited = set()
+
+        # while the queue is not empty:
+        while q.size() > 0:
+            # get the current vertex (dequeue from queue)
+            current_vertex = q.dequeue()
+
+            # check if current vertex has not been visited:
+            if current_vertex not in visited:
+                # print the current vertex
+                print(current_vertex)
+                # mark the current vertex as visited
+                visited.add(current_vertex)
+
+                # queue up all the current vertex's neighbors (so we can visit them next)
+                for n in self.get_neighbors(current_vertex):
+                    q.enqueue(n)
+
+
 
     def dft(self, starting_vertex):
         """
         Print each vertex in depth-first order
         beginning from starting_vertex.
         """
-        pass  # TODO
+        
+        
+        # Create an empty stack and add the starting_vertex
+        s = Stack()
+        s.push(starting_vertex)
+        # create an empty set to track visited vertices
+        visited = set()
+
+        # while the stack is not empty:
+        while s.size() > 0:
+            # get the current vertex (pop from stack)
+            current_vertex = s.pop()
+
+            # check if current vertex has not been visited:
+            if current_vertex not in visited:
+                # print the current vertex
+                print(current_vertex)
+                # mark the current vertex as visited
+                visited.add(current_vertex)
+
+                # push up all the current vertex's neighbors (so we can visit them next)
+                for n in self.get_neighbors(current_vertex):
+                    s.push(n)
+
 
     def dft_recursive(self, starting_vertex):
         """
@@ -56,7 +104,40 @@ class Graph:
         starting_vertex to destination_vertex in
         breath-first order.
         """
-        pass  # TODO
+        print('--------------')
+        # Create an empty queue and enqueue the PATH TO starting_vertex
+        q = Queue()
+        q.enqueue([starting_vertex])
+        # create an empty set to track visited vertices
+        visited = set()
+
+        # while the queue is not empty:
+        while q.size() > 0:
+            # get the current vertex PATH (dequeue from queue)
+            path = q.dequeue()
+            # set the current vertex to the LAST element of the PATH
+            current_vertex = path[-1]
+
+            # check if current vertex has not been visited:
+            if current_vertex not in visited:
+                # Check if the current vertex is destination
+                if current_vertex == destination_vertex:
+                    # IF IT IS, STOP AND RETURN THE PATH
+                    return path
+
+                # mark the current vertex as visited
+                visited.add(current_vertex)
+
+                # queue up all NEW paths with each neighbor:
+                for p in self.get_neighbors(current_vertex):
+                    # take current path
+                    current_path = path
+                    # append the neighbor to it
+                    current_path.append(p)
+                    # queue up the NEW path
+                    q.enqueue(current_path)
+                    print(q.queue)
+
 
     def dfs(self, starting_vertex, destination_vertex):
         """
