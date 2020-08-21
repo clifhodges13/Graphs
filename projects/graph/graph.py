@@ -65,7 +65,6 @@ class Graph:
         beginning from starting_vertex.
         """
         
-        
         # Create an empty stack and add the starting_vertex
         s = Stack()
         s.push(starting_vertex)
@@ -104,26 +103,29 @@ class Graph:
         starting_vertex to destination_vertex in
         breath-first order.
         """
-        print('--------------')
         # Create an empty queue and enqueue the PATH TO starting_vertex
         q = Queue()
-        q.enqueue([starting_vertex])
+        q.enqueue({
+            'current_vertex': starting_vertex,
+            'path': [starting_vertex]
+        })
         # create an empty set to track visited vertices
         visited = set()
 
         # while the queue is not empty:
         while q.size() > 0:
             # get the current vertex PATH (dequeue from queue)
-            path = q.dequeue()
+            current_obj = q.dequeue()
+            current_path = current_obj['path']
+            current_vertex = current_obj['current_vertex']
             # set the current vertex to the LAST element of the PATH
-            current_vertex = path[-1]
 
             # check if current vertex has not been visited:
             if current_vertex not in visited:
                 # Check if the current vertex is destination
                 if current_vertex == destination_vertex:
                     # IF IT IS, STOP AND RETURN THE PATH
-                    return path
+                    return current_path
 
                 # mark the current vertex as visited
                 visited.add(current_vertex)
@@ -131,12 +133,15 @@ class Graph:
                 # queue up all NEW paths with each neighbor:
                 for p in self.get_neighbors(current_vertex):
                     # take current path
-                    current_path = path
+                    new_path = list(current_path)
                     # append the neighbor to it
-                    current_path.append(p)
+                    new_path.append(p)
                     # queue up the NEW path
-                    q.enqueue(current_path)
-                    print(q.queue)
+                    q.enqueue({
+                        'current_vertex': p,
+                        'path': new_path
+                    })
+        return None
 
 
     def dfs(self, starting_vertex, destination_vertex):
@@ -145,7 +150,45 @@ class Graph:
         starting_vertex to destination_vertex in
         depth-first order.
         """
-        pass  # TODO
+        # Create an empty queue and enqueue the PATH TO starting_vertex
+        s = Stack()
+        s.push({
+            'current_vertex': starting_vertex,
+            'path': [starting_vertex]
+        })
+        # create an empty set to track visited vertices
+        visited = set()
+
+        # while the queue is not empty:
+        while s.size() > 0:
+            # get the current vertex PATH (pop from stack)
+            current_obj = s.pop()
+            current_path = current_obj['path']
+            current_vertex = current_obj['current_vertex']
+            # set the current vertex to the LAST element of the PATH
+
+            # check if current vertex has not been visited:
+            if current_vertex not in visited:
+                # Check if the current vertex is destination
+                if current_vertex == destination_vertex:
+                    # IF IT IS, STOP AND RETURN THE PATH
+                    return current_path
+
+                # mark the current vertex as visited
+                visited.add(current_vertex)
+
+                # push up all NEW paths with each neighbor:
+                for p in self.get_neighbors(current_vertex):
+                    # take current path
+                    new_path = list(current_path)
+                    # append the neighbor to it
+                    new_path.append(p)
+                    # push up the NEW path
+                    s.push({
+                        'current_vertex': p,
+                        'path': new_path
+                    })
+        return None
 
     def dfs_recursive(self, starting_vertex, destination_vertex):
         """
