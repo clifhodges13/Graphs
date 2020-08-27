@@ -110,15 +110,13 @@ class SocialGraph:
 
                 # mark the current user as visited
                 visited[current_user] = current_path
-                print(visited)
 
-                # queue up all NEW paths with each neighbor:
-                for friend in self.friendships:
+                # queue up all NEW paths with each friendship:
+                for friend in self.friendships[current_user]:
                     # take current path
-                    new_path = list(current_path)
+                    new_path = current_path.copy()
                     # append the neighbor to it
                     new_path.append(friend)
-                    print(new_path)
                     # queue up the NEW path
                     q.enqueue(new_path)
 
